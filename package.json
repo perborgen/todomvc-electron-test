@@ -9,7 +9,7 @@
     "dist": "build",
     "win": "build --win"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/perborgen/todomvc-electron-test",
   "keywords": [
     "Electron",
     "quick",
@@ -21,23 +21,20 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^1.4.1",
-    "electron-builder": "7.14.2"
+    "electron-builder": "7.14.2",
+    "electron-packager": "^12.2.0"
   },
   "build": {
-    "appId": "",
+    "appId": "com.gitspeak-test.app",
+    "asar": true,
     "mac": {
-      "category": ""
+      "icon": "assets/icons/mac/icon.icns",
+      "category": "your.app.category.type"
     },
-    "protocols": [{
-      "name": "todo2",
-      "role": "Viewer",
-      "schemes": ["todo2", "todos2"]
-    }],
-    "win": {
-      "target": "nsis"
-    },
-    "nsis": {
-      "perMachine": true
+    "publish": {
+      "provider": "github",
+      "repo": "gitspeak-app",
+      "owner": "scrimba"
     }
   }
 }

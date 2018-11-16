@@ -1,13 +1,14 @@
 {
   "name": "todo",
-  "version": "1.0.2",
+  "version": "0.0.3",
   "description": "TodoMVC Electron application",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "pack": "build --dir",
     "dist": "build",
-    "win": "build --win"
+    "win": "build --win",
+    "gh-publish": "electron-builder --mac -p always"
   },
   "repository": "https://github.com/perborgen/todomvc-electron-test",
   "keywords": [
@@ -17,24 +18,32 @@
     "tutorial",
     "demo"
   ],
-  "author": "GitHub",
+  "author": "perborgen",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^1.4.1",
-    "electron-builder": "7.14.2",
+    "electron": "^3.0.3",
+    "electron-builder": "^20.34.0",
     "electron-packager": "^12.2.0"
   },
   "build": {
-    "appId": "com.gitspeak-test.app",
+    "appId": "com.perborgen-todomvc-electron-test.app",
     "asar": true,
     "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
       "icon": "assets/icons/mac/icon.icns",
       "category": "your.app.category.type"
     },
     "publish": {
       "provider": "github",
-      "repo": "gitspeak-app",
-      "owner": "scrimba"
+      "repo": "todomvc-electron-test",
+      "owner": "perborgen"
     }
+  },
+  "dependencies": {
+    "electron-log": "^2.2.17",
+    "electron-updater": "^4.0.3"
   }
 }

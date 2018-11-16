@@ -1,4 +1,8 @@
 const electron = require('electron')
+const { autoUpdater } = require("electron-updater");
+const log = require('electron-log');
+
+
 // Module to control application life.
 const app = electron.app
 const protocol = electron.protocol
@@ -13,11 +17,44 @@ let mainWindow
 console.log('process args', process.argv)
 
 // TODO pass the base url in the environment variable during setup?
-const base = 'https://todomvc-express.bahmutov.com/'
+const base = 'https://scrimba.com/'
 let initialUrl = ''
 // This application opens links that start with this protocol
-const PROTOCOL = 'todo2://'
+const PROTOCOL = 'scrimba://'
 const PROTOCOL_PREFIX = PROTOCOL.split(':')[0]
+
+// Auto updating stuff
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
+
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...');
+})
+autoUpdater.on('update-available', (info) => {
+  sendStatusToWindow('Update available.');
+})
+autoUpdater.on('update-not-available', (info) => {
+  sendStatusToWindow('Update not available.');
+})
+autoUpdater.on('error', (err) => {
+  sendStatusToWindow('Error in auto-updater. ' + err);
+})
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  sendStatusToWindow(log_message);
+})
+autoUpdater.on('update-downloaded', (info) => {
+  sendStatusToWindow('Update downloaded');
+});
+
+function sendStatusToWindow(text) {
+  log.info(text);
+  main.webContents.send('message', text);
+}
+
 
 // prints given message both in the terminal console and in the DevTools
 function devToolsLog(s) {
@@ -46,6 +83,8 @@ function createWindow () {
   mainWindow = new BrowserWindow({width: 1000, height: 800})
   // just for demo purposes
   mainWindow.webContents.openDevTools()
+  autoUpdater.checkForUpdatesAndNotify();
+
 
   devToolsLog('process args ' + process.argv.join(','))
   devToolsLog('initial url? ' + initialUrl)
@@ -76,6 +115,8 @@ function createWindow () {
     // the full url ourselves
     // if we return HTTP url instead, the browser will not know how
     // to resolve relative links, since it will still be using PROTOCOL://link
+    devToolsLog('todoPath: ', todoPath)
+    console.log('todoPath: ', todoPath)
     const fullUrl = formFullTodoUrl(todoPath)
     devToolsLog('full url to open ' + fullUrl)
     mainWindow.loadURL(fullUrl)

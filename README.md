@@ -1,3 +1,21 @@
+Add this to package.json for url scheme:
+
+    "protocols": [
+      {
+        "name": "scrimba",
+        "role": "Viewer",
+        "schemes": [
+          "scrimba"
+        ]
+      }
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "perMachine": true
+    }
+
 # todomvc-electron-test
 
 This is a clone of [Electron quick start](https://github.com/electron/electron-quick-start)
